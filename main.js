@@ -4,7 +4,7 @@ const App = React.createClass({
         player0: [],
         player1: [],
         play: false,
-        t0:'', t1:'', t2:'', t3:'', t4:'', t5:'', t7:'', t8:'',
+        t0:'', t1:'', t2:'', t3:'', t4:'', t5:'', t6:'', t7:'', t8:'',
         currPlayer: 0,
         info: ''
       }
@@ -25,9 +25,8 @@ const App = React.createClass({
   renderBoard(){
     let {play} = this.state;
     const rows = [0,1,2];
-    if(play){
-      return rows.map(currRow => <tr key={uuid()}>{this.renderRow(currRow)}</tr>);
-    }
+
+    return rows.map(currRow => <tr key={uuid()}>{this.renderRow(currRow)}</tr>);
   },
 
   renderRow(currRow){
@@ -54,10 +53,14 @@ const App = React.createClass({
   },
 
   markTile(e){
-    let {currPlayer,player0,player1,t0, t1, t2, t3, t4, t6, t5, t7, t8} = this.state;
-    let mark = '';
+    let {currPlayer,player0,player1, play, t0, t1, t2, t3, t4, t6, t5, t7, t8} = this.state;
+    let mark;
     let change = false;
     let nextPlayer;
+
+    if(!play){
+      return;
+    }
 
     if(currPlayer === 0){
       mark = 'X';
@@ -137,19 +140,12 @@ const App = React.createClass({
         })
 
         this.checkWin([...player0,e.currentTarget.id],0);
-
-        console.log('player0');
-        console.log([...player0,e.currentTarget.id]);
-
       }else{
         this.setState({
           player1: [...player1,e.currentTarget.id]
         })
 
         this.checkWin([...player1,e.currentTarget.id],1);
-
-        console.log('player1');
-        console.log([...player1,e.currentTarget.id]);
       }
     }
   },
@@ -173,7 +169,8 @@ const App = React.createClass({
 
         if(found == 3){
           this.setState({
-            info: `WIN player${player}`
+            info: `WIN player${player}`,
+            play: false
           })
 
         }
